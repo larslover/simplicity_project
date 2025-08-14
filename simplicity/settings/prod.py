@@ -6,7 +6,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'simplicity.pythonanywhere.com',
     'www.simplicitysapps.com',
-    'simplicitysapps.com',
+    
     
 ]
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key')
@@ -33,4 +33,4 @@ DATABASES = {
         },
     }
 }
-SECURE_SSL_REDIRECT = False  # avoid redirect loops
+SECURE_SSL_REDIRECT = True
