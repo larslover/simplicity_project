@@ -6,6 +6,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'simplicity.pythonanywhere.com',
     'www.simplicitysapps.com',
+    'simplicitysapps.com',
+    
 ]
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
