@@ -8,6 +8,12 @@ ALLOWED_HOSTS = [
     'www.simplicitysapps.com',
 ]
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER', 'default@example.com')
+
 
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'default@example.com')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
