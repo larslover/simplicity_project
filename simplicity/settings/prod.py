@@ -12,15 +12,19 @@ ALLOWED_HOSTS = [
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'replace-this-with-env-secret')
 
 # Static files
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'simplicity' / 'staticfiles'
 
+
+# Email using business account
 # Email using business account
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.office365.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'lars@simplicitysapps.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = '2Cor5:17!'
+
+
 
 # MySQL database on PythonAnywhere (adjust username and DB)
 DATABASES = {
