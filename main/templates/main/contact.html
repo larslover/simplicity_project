@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us | Simplicity</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/style.css' %}">
+</head>
+<body>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/contact/">Contact</a>
+</nav>
+
+<header>
+    <h1>Contact Us</h1>
+</header>
+
+<main>
+    {% if success %}
+        <p class="success">Thank you! Your message has been sent.</p>
+    {% endif %}
+
+    <div class="contact-form-container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Simplicity. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

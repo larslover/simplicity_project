@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simplicity | Making Life Simple</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/style.css' %}">
+    <style>
+        /* Ensure full height layout */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1; /* Pushes footer to the bottom if content is short */
+        }
+        footer {
+            margin-top: 0; /* Remove extra gap */
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" class="logo-link">
+            <img src="{% static 'main/images/logo-new.png' %}" alt="Simplicity Logo" class="logo">
+            <span class="logo-text">Simplicity</span>
+        </a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/contact/">Contact</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Simplicity</h1>
+        <p>Making Life Simple Through Innovative Apps</p>
+    </header>
+
+    <main>
+      <h2>Welcome!</h2>
+      <p>I specialize in creating digital tools for NGOs, churches, and community-focused organizations.</p>
+      <p>Whether you need a modern website, a user-friendly mobile app, or help bringing your idea to life, I’m here to make it simple for you.</p>
+      <p>Let’s talk about your vision and how we can turn it into something that works beautifully for your community or your business!</p>
+      <a href="/contact/" class="button">Start the Conversation</a>
+  </main>
+  
+
+    <footer>
+        <p>&copy; 2025 Simplicity. All rights reserved.</p>
+    </footer>
+</body>
+</html>
