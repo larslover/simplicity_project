@@ -1,22 +1,16 @@
 from django.shortcuts import render
-from django.core.mail import send_mail
 from django.conf import settings
 from .forms import ContactForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-
-def home(request):
-    return render(request, 'main/index.html')
-from django.shortcuts import render
-from django.core.mail import send_mail
-from django.conf import settings
-from .forms import ContactForm
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
+from django.core.mail import EmailMessage
 import logging
 
 # Set up a simple logger
 logger = logging.getLogger(__name__)
+
+def home(request):
+    return render(request, 'main/index.html')
 
 def contact(request):
     email_sent = None
@@ -25,41 +19,53 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
+            name = form.cleaned_data.get('name')
             email = form.cleaned_data.get('email')
+            message = form.cleaned_data.get('message')
 
             # Validate email
             try:
                 validate_email(email)
             except ValidationError:
                 error = "Please enter a valid email address."
-                # Log the attempt with name and message, but no email
-                logger.warning(f"Contact form submitted without valid email. Name: {form.cleaned_data.get('name')}, Message: {form.cleaned_data.get('message')}")
+                # Log invalid submission
+                logger.warning(f"Contact form submitted without valid email. Name: {name}, Message: {message}")
                 return render(request, 'main/contact.html', {
                     'form': form,
                     'success': False,
                     'error': error
                 })
 
-            # Save valid submission
+            # Save valid submission to database
             form.save()
 
-            # Send email
-            subject = f"New message from {form.cleaned_data['name']}"
-            message = form.cleaned_data['message']
-            from_email = email
+            # Prepare email
+            subject = f"New message from {name}"
+            from_email = settings.EMAIL_HOST_USER
             recipient_list = [settings.EMAIL_HOST_USER]
 
+            email_message = EmailMessage(
+                subject=subject,
+                body=message,
+                from_email=from_email,
+                to=recipient_list,
+                reply_to=[email]  # Sender's email here
+            )
+
+            # Send email
             try:
-                send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+                email_message.send(fail_silently=False)
                 email_sent = True
             except Exception as e:
                 print("Email sending failed:", e)
                 email_sent = False
 
+            # Render empty form after submission
             return render(request, 'main/contact.html', {
                 'form': ContactForm(),
                 'success': email_sent
             })
+
     else:
         form = ContactForm()
 
