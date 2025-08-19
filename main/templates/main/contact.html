@@ -45,13 +45,18 @@
   <main class="flex-grow-1 py-5">
     <div class="container">
 
+      <!-- Success Message -->
       {% if success %}
         <div class="alert alert-success text-center" role="alert">
           Thank you! Your message has been sent.
         </div>
+      {% elif error %}
+        <div class="alert alert-danger text-center" role="alert">
+          {{ error }}
+        </div>
       {% endif %}
 
-      <!-- Business email contact -->
+      <!-- Direct Email Contact -->
       <div class="row justify-content-center mb-4">
         <div class="col-12 col-md-8 col-lg-6">
           <div class="alert alert-info text-center" role="alert">
@@ -61,13 +66,44 @@
         </div>
       </div>
 
-      <!-- Contact form -->
+      <!-- Contact Form -->
       <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-6">
           <form method="post" class="p-4 bg-light rounded shadow">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-success w-100 mt-3">Send</button>
+
+            <!-- Name -->
+            <div class="mb-3">
+              {{ form.name.label_tag }}
+              {{ form.name }}
+              {% if form.name.errors %}
+                <div class="text-danger">{{ form.name.errors }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              {{ form.email.label_tag }}
+              {{ form.email }}
+              {% if form.email.errors %}
+                <div class="text-danger">{{ form.email.errors }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Message -->
+            <div class="mb-3">
+              {{ form.message.label_tag }}
+              {{ form.message }}
+              {% if form.message.errors %}
+                <div class="text-danger">{{ form.message.errors }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Hidden Spam Fields -->
+            {{ form.honeypot }}
+            {{ form.timestamp }}
+
+            <button type="submit" class="btn btn-success w-100 mt-3">Send Message</button>
           </form>
         </div>
       </div>
