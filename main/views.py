@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 def home(request):
     return render(request, 'main/index.html')
-
 def contact(request):
     email_sent = None
     error = None
@@ -19,6 +18,14 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
+            # Honeypot check: if a bot filled it, just discard silently
+            if form.cleaned_data.get('honeypot'):
+                # Pretend success so bot doesn't try again
+                return render(request, 'main/contact.html', {
+                    'form': ContactForm(),
+                    'success': True
+                })
+
             name = form.cleaned_data.get('name')
             email = form.cleaned_data.get('email')
             message = form.cleaned_data.get('message')
@@ -28,7 +35,6 @@ def contact(request):
                 validate_email(email)
             except ValidationError:
                 error = "Please enter a valid email address."
-                # Log invalid submission
                 logger.warning(f"Contact form submitted without valid email. Name: {name}, Message: {message}")
                 return render(request, 'main/contact.html', {
                     'form': form,
@@ -36,7 +42,7 @@ def contact(request):
                     'error': error
                 })
 
-            # Save valid submission to database
+            # Save valid submission
             form.save()
 
             # Prepare email
@@ -49,7 +55,7 @@ def contact(request):
                 body=message,
                 from_email=from_email,
                 to=recipient_list,
-                reply_to=[email]  # Sender's email here
+                reply_to=[email]
             )
 
             # Send email
@@ -60,7 +66,6 @@ def contact(request):
                 print("Email sending failed:", e)
                 email_sent = False
 
-            # Render empty form after submission
             return render(request, 'main/contact.html', {
                 'form': ContactForm(),
                 'success': email_sent
